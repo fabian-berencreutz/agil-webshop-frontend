@@ -1,1 +1,27 @@
+.app {
+  min-height: 100vh; /* the page is at least the whole screen tall */
+  display: flex;
+  flex-direction: column; /* header on top, footer at the bottom */
+}
+
+.main {
+  flex: 1; /* the middle eats all leftover space — footer gets pushed down */
+  padding: 2rem;
+}
+
+.header {
+  background-color: #1f2937;
+  color: white;
+  padding: 1rem 2rem;
+}
+.header h1 {
+  color: white;
+}
+
+.footer {
+  background: #1f2937;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+}
 /* App specific styles */
