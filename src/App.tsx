@@ -1,10 +1,15 @@
-import './App.css'
+import './App.css';
 import { useState } from "react";
 import {
-  Routes,
+  Link,
   Route,
+  Routes,
   useNavigate,
 } from "react-router-dom";
+
+import ProductsPage from "./pages/ProductsPage";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 import { login } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -58,18 +63,42 @@ function LoginPage() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
+    <div className="app">
+      <Header />
 
-      <Route
-        path="/private"
-        element={
-          <ProtectedRoute>
-            <PrivatePage />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+      <nav>
+        <Link to="/">Hem</Link>{" "}
+        <Link to="/products">Produkter</Link>{" "}
+        <Link to="/login">Logga in</Link>
+      </nav>
+
+      <main className="main">
+        <Routes>
+          <Route path="/" element={<h2>Välkommen</h2>} />
+
+          <Route
+            path="/products"
+            element={<ProductsPage />}
+          />
+
+          <Route
+            path="/login"
+            element={<LoginPage />}
+          />
+
+          <Route
+            path="/private"
+            element={
+              <ProtectedRoute>
+                <PrivatePage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
