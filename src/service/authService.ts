@@ -25,6 +25,7 @@ export async function login(request: LoginRequest): Promise<AuthResponse> {
   const data: AuthResponse = await response.json();
 
   sessionStorage.setItem("token", data.token);
+  sessionStorage.setItem("username", request.username);
 
   return data;
 }
@@ -35,4 +36,7 @@ export function getToken(): string | null {
 
 export function isAuthenticated(): boolean {
   return getToken() !== null;
+}
+export function getUsername(): string | null {
+  return sessionStorage.getItem("username");
 }

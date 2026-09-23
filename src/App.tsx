@@ -1,14 +1,11 @@
-import './App.css'
+import "./App.css";
 import { useState } from "react";
-import {
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import { login } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
+import WelcomePage from "./pages/WelcomePage";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -25,7 +22,7 @@ function LoginPage() {
       });
 
       setMessage("Inloggning lyckades");
-      navigate("/private");
+      navigate("/welcome");
     } catch {
       setMessage("Fel användarnamn eller lösenord");
     }
@@ -66,6 +63,14 @@ function App() {
         element={
           <ProtectedRoute>
             <PrivatePage />
+            <Route
+              path="/welcome"
+              element={
+                <ProtectedRoute>
+                  <WelcomePage />
+                </ProtectedRoute>
+              }
+            />
           </ProtectedRoute>
         }
       />
