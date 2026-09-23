@@ -1,9 +1,10 @@
 import type { Product } from '../types/product';
+import { getToken } from './authService';
 
 const API_URL = import.meta.env.VITE_PRODUCT_SERVICE_URL || 'http://localhost:8081/products';
 
 export async function getProducts(token?: string): Promise<Product[]> {
-  const authToken = token || localStorage.getItem('token') || localStorage.getItem('accessToken');
+  const authToken = token || getToken() || localStorage.getItem('token') || localStorage.getItem('accessToken');
 
   const headers: HeadersInit = {};
   if (authToken) {
