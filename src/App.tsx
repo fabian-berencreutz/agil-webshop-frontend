@@ -1,4 +1,4 @@
-import './App.css';
+import "./App.css";
 import { useState } from "react";
 import {
   Link,
@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import { login } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
+import WelcomePage from "./pages/WelcomePage";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -30,7 +31,7 @@ function LoginPage() {
       });
 
       setMessage("Inloggning lyckades");
-      navigate("/private");
+      navigate("/welcome");
     } catch {
       setMessage("Fel användarnamn eller lösenord");
     }
@@ -84,6 +85,15 @@ function App() {
           <Route
             path="/login"
             element={<LoginPage />}
+          />
+
+          <Route
+            path="/welcome"
+            element={
+              <ProtectedRoute>
+                <WelcomePage />
+              </ProtectedRoute>
+            }
           />
 
           <Route
