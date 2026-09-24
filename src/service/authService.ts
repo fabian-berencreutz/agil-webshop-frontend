@@ -4,7 +4,7 @@ export type LoginRequest = {
 };
 
 export type AuthResponse = {
-  token: string;
+  accessToken: string;
 };
 
 const AUTH_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -24,7 +24,7 @@ export async function login(request: LoginRequest): Promise<AuthResponse> {
 
   const data: AuthResponse = await response.json();
 
-  sessionStorage.setItem("token", data.token);
+  sessionStorage.setItem("token", data.accessToken);
 
   return data;
 }
