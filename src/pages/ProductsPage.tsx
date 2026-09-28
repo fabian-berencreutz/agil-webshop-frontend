@@ -1,11 +1,26 @@
 import { useEffect, useState } from 'react';
-import type { Product } from '../types/product';
+import type { CartItem, Product } from '../types/product';
 import { getProducts } from '../service/productService';
+import ProductCard from '../components/ProductCard';
+import Cart from '../components/Cart';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [showCart, setShowCart] = useState(false);
+
+  function addToCart(product: Product){
+      const cartItem: CartItem = {
+        product,
+        quantity: 1,
+      };
+
+      setCartItems((currentItems) => [...currentItems, cartItem]);
+
+      alert(`${cartItem.product.name} har lagts i kundvagnen`)
+  }
 
   useEffect(() => {
     async function fetchProductsData() {
@@ -45,12 +60,15 @@ export default function ProductsPage() {
       <h2>Produkter</h2>
       <ul>
         {products.map((product) => (
-          <li key={product.id}>
-            <strong>{product.name}</strong> - {product.price} kr (Lager: {product.quantity})
-            <p>{product.description}</p>
-          </li>
+          <ProductCard key={product.id} product={product} onAdd={addToCart}/>
         ))}
       </ul>
+
+      <button onClick={() => setShowCart(!showCart)}>
+        {showCart ? "Dölj kundvagn" : "Visa kundvagn"}
+      </button>
+
+      {showCart && <Cart items={cartItems}/>}
     </div>
   );
 }
