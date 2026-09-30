@@ -1,12 +1,7 @@
-import './App.css';
+import "./App.css";
 import { useState } from "react";
-import {
-  Link,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
-
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import AdminProductsPage from "./pages/AdminProductsPage";
 import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -67,24 +62,18 @@ function App() {
       <Header />
 
       <nav>
-        <Link to="/">Hem</Link>{" "}
-        <Link to="/products">Produkter</Link>{" "}
+        <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
         <Link to="/login">Logga in</Link>
       </nav>
 
       <main className="main">
         <Routes>
           <Route path="/" element={<h2>Välkommen</h2>} />
+          <Route path="/admin/products" element={<AdminProductsPage />} />
 
-          <Route
-            path="/products"
-            element={<ProductsPage />}
-          />
+          <Route path="/products" element={<ProductsPage />} />
 
-          <Route
-            path="/login"
-            element={<LoginPage />}
-          />
+          <Route path="/login" element={<LoginPage />} />
 
           <Route
             path="/private"
