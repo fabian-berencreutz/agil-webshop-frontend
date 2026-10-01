@@ -1,12 +1,13 @@
 import "./App.css";
 import { useState } from "react";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+
 import AdminProductsPage from "./pages/AdminProductsPage";
 import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-import { login } from "./service/authService";
+import { login, isAdmin } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
 
@@ -69,9 +70,19 @@ function App() {
       <main className="main">
         <Routes>
           <Route path="/" element={<h2>Välkommen</h2>} />
-          <Route path="/admin/products" element={<AdminProductsPage />} />
 
           <Route path="/products" element={<ProductsPage />} />
+
+          <Route
+            path="/admin/products"
+            element={
+              isAdmin() ? (
+                <AdminProductsPage />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
 
           <Route path="/login" element={<LoginPage />} />
 

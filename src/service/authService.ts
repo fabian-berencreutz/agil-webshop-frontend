@@ -36,3 +36,20 @@ export function getToken(): string | null {
 export function isAuthenticated(): boolean {
   return getToken() !== null;
 }
+export function isAdmin(): boolean {
+  const token = getToken();
+
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const payload = JSON.parse(
+      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
+    );
+
+    return payload.roles?.includes("ADMIN") ?? false;
+  } catch {
+    return false;
+  }
+}
