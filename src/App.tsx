@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import { login, isAdmin } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
+import AddProductPage from "./pages/AddProductPage";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -92,6 +93,12 @@ function App() {
               <ProtectedRoute>
                 <PrivatePage />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/products/new"
+            element={
+              isAdmin() ? <AddProductPage /> : <Navigate to="/login" replace />
             }
           />
         </Routes>

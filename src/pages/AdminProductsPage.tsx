@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../service/productService";
+import { deleteProduct, getProducts } from "../service/productService";
 import type { Product } from "../types/product";
 
 function AdminProductsPage() {
@@ -12,6 +12,18 @@ function AdminProductsPage() {
       .catch(() => setError("Kunde inte hämta produkter"));
   }, []);
 
+  async function handleDelete(id: number) {
+    try {
+      await deleteProduct(id);
+
+      setProducts((currentProducts) =>
+        currentProducts.filter((product) => product.id !== id),
+      );
+    } catch {
+      setError("Kunde inte ta bort produkten");
+    }
+  }
+
   return (
     <div>
       <h1>Admin - Produkter</h1>
@@ -21,6 +33,8 @@ function AdminProductsPage() {
       {products.map((product) => (
         <div key={product.id}>
           <h2>{product.name}</h2>
+
+          <button onClick={() => handleDelete(product.id)}>Ta bort</button>
         </div>
       ))}
     </div>
