@@ -5,7 +5,15 @@ export type LoginRequest = {
 
 export type AuthResponse = {
   accessToken: string;
+  expiresIn: number;
+  subject: string;
+  roles: string[];
 };
+
+export type UserInfo = {
+  subject: string;
+  roles: string[];
+}
 
 const AUTH_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -25,31 +33,28 @@ export async function login(request: LoginRequest): Promise<AuthResponse> {
   const data: AuthResponse = await response.json();
 
   sessionStorage.setItem("token", data.accessToken);
+  sessionStorage.setItem("user", JSON.stringify({subject: data.subject, roles: data.roles}));
 
   return data;
+}
+
+export function logout(): void {
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
 }
 
 export function getToken(): string | null {
   return sessionStorage.getItem("token");
 }
 
+export function getUser(): UserInfo | null {
+  const user = sessionStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+}
+
 export function isAuthenticated(): boolean {
   return getToken() !== null;
 }
 export function isAdmin(): boolean {
-  const token = getToken();
-
-  if (!token) {
-    return false;
-  }
-
-  try {
-    const payload = JSON.parse(
-      atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
-    );
-
-    return payload.roles?.includes("ADMIN") ?? false;
-  } catch {
-    return false;
-  }
+  return getUser()?.roles.includes("ADMIN") ?? false;
 }
