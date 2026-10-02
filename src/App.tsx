@@ -6,7 +6,7 @@ import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-import { isAdmin } from "./service/authService";
+import { isAdmin, logout } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
@@ -18,7 +18,7 @@ function App() {
       <Header />
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
-        <Link to="/login">Logga in</Link>
+        <Link to="/login">Logga in</Link> <Link to="/" onClick={logout}>Logga ut</Link>
       </nav>
 
       <main className="main">
