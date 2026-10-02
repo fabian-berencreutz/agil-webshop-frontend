@@ -33,6 +33,10 @@ function AdminProductsPage() {
       {products.map((product) => (
         <div key={product.id}>
           <h2>{product.name}</h2>
+          <p>ID: {product.id}</p>
+          <p>{product.description}</p>
+          <p>Pris: {product.price} kr</p>
+          <p>Lager: {product.quantity}</p>
 
           <button onClick={() => handleDelete(product.id)}>Ta bort</button>
         </div>
