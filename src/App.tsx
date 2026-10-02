@@ -18,6 +18,7 @@ function App() {
       <Header />
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
+        <Link to="/private">Adminpanel</Link>{" "}
         <Link to="/login">Logga in</Link> <Link to="/" onClick={logout}>Logga ut</Link>
       </nav>
 
