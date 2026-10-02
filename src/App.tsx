@@ -1,68 +1,21 @@
 import "./App.css";
-import { useState } from "react";
-import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 
 import AdminProductsPage from "./pages/AdminProductsPage";
 import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-import { login, isAdmin } from "./service/authService";
+import { isAdmin } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
-
-function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-
-  const navigate = useNavigate();
-
-  async function handleLogin() {
-    try {
-      await login({
-        username,
-        password,
-      });
-
-      setMessage("Inloggning lyckades");
-      navigate("/private");
-    } catch {
-      setMessage("Fel användarnamn eller lösenord");
-    }
-  }
-
-  return (
-    <div>
-      <h1>Logga in</h1>
-
-      <input
-        type="email"
-        placeholder="E-post"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Lösenord"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button onClick={handleLogin}>Logga in</button>
-
-      <p>{message}</p>
-    </div>
-  );
-}
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
     <div className="app">
       <Header />
-
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
         <Link to="/login">Logga in</Link>
