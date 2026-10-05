@@ -39,6 +39,8 @@ export type CreateProductRequest = {
   description: string;
   price: number;
   quantity: number;
+  category?: string;
+  imageUrl?: string;
 };
 
 export async function createProduct(

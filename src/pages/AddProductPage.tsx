@@ -7,6 +7,8 @@ function AddProductPage() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [category, setCategory] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,6 +19,8 @@ function AddProductPage() {
         description,
         price: Number(price),
         quantity: Number(quantity),
+        category,
+        imageUrl,
       });
 
       alert("Produkten skapades");
@@ -63,6 +67,24 @@ function AddProductPage() {
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
+          />
+        </label>
+
+        <label>
+          Kategori:
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </label>
+
+        <label>
+          Bild-URL:
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
           />
         </label>
 
