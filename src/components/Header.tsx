@@ -1,10 +1,16 @@
-import { useLocation } from "react-router-dom";
-import { getUser } from "../service/authService";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getUser, logout } from "../service/authService";
 
 function Header() {
   useLocation();
 
   const user = getUser();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/", { replace: true});
+  }
 
   return (
     <header className="header">
@@ -14,6 +20,7 @@ function Header() {
         <div>
           <p>Inloggad som: {user.subject}</p>
           <p>Roll: {user.roles.join(", ")}</p>
+          <button onClick={handleLogout}>Logga ut</button>
         </div>
       )}
     </header>
