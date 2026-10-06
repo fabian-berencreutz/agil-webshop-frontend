@@ -56,5 +56,7 @@ export function isAuthenticated(): boolean {
   return getToken() !== null;
 }
 export function isAdmin(): boolean {
-  return getUser()?.roles.includes("ADMIN") ?? false;
+  const roles = getUser()?.roles;
+  if (!roles) return false;
+  return roles.includes("ADMIN") || roles.includes("ROLE_ADMIN");
 }
