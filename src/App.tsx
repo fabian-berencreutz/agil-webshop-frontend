@@ -6,8 +6,8 @@ import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-import { isAdmin } from "./service/authService";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
@@ -31,11 +31,9 @@ function App() {
           <Route
             path="/admin/products"
             element={
-              isAdmin() ? (
+              <AdminRoute>
                 <AdminProductsPage />
-              ) : (
-                <Navigate to="/login" replace />
-              )
+              </AdminRoute>
             }
           />
 
@@ -52,7 +50,9 @@ function App() {
           <Route
             path="/admin/products/new"
             element={
-              isAdmin() ? <AddProductPage /> : <Navigate to="/login" replace />
+              <AdminRoute>
+                <AddProductPage />
+              </AdminRoute>
             }
           />
         </Routes>
