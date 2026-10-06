@@ -1,4 +1,5 @@
 import type { Product } from "../types/product";
+import type { Category } from "../types/category";
 import { getToken } from "./authService";
 
 const API_URL =
@@ -39,7 +40,7 @@ export type CreateProductRequest = {
   description: string;
   price: number;
   quantity: number;
-  category?: string;
+  category?: Category;
   imageUrl?: string;
 };
 
