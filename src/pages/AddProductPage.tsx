@@ -1,13 +1,14 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { createProduct } from "../service/productService";
+import { categories, type Category } from "../types/category";
 
 function AddProductPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<Category>(categories[0]);
   const [imageUrl, setImageUrl] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -72,11 +73,16 @@ function AddProductPage() {
 
         <label>
           Kategori:
-          <input
-            type="text"
+          <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
+            onChange={(e) => setCategory(e.target.value as Category)}
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label>
