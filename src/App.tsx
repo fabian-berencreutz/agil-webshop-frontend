@@ -1,25 +1,34 @@
 import "./App.css";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 
 import AdminProductsPage from "./pages/AdminProductsPage";
 import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-import { isAdmin } from "./service/authService";
-import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 
+import { isAdmin, isAuthenticated } from "./service/authService";
+
 function App() {
+  useLocation();
+
   return (
     <div className="app">
       <Header />
+
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
-        <Link to="/private">Adminpanel</Link> <Link to="/login">Logga in</Link>
+        {isAdmin() && (
+          <>
+            <Link to="/private">Adminpanel</Link>{" "}
+          </>
+        )}
+        {!isAuthenticated() && <Link to="/login">Logga in</Link>}
       </nav>
 
       <main className="main">
@@ -28,32 +37,34 @@ function App() {
 
           <Route path="/products" element={<ProductsPage />} />
 
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
+
           <Route
             path="/admin/products"
             element={
-              isAdmin() ? (
+              <AdminRoute>
                 <AdminProductsPage />
-              ) : (
-                <Navigate to="/login" replace />
-              )
+              </AdminRoute>
             }
           />
 
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/products/:id" element={<ProductDetailsPage />} />
 
           <Route
             path="/private"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <PrivatePage />
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
+
           <Route
             path="/admin/products/new"
             element={
-              isAdmin() ? <AddProductPage /> : <Navigate to="/login" replace />
+              <AdminRoute>
+                <AddProductPage />
+              </AdminRoute>
             }
           />
         </Routes>

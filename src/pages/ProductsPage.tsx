@@ -3,6 +3,7 @@ import type { CartItem, Product } from "../types/product";
 import { getProducts } from "../service/productService";
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
+import { categories } from "../types/category";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -11,6 +12,9 @@ export default function ProductsPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Alla");
+
+  const categoryOptions = ["Alla", ...categories];
 
   function addToCart(product: Product) {
     const cartItem: CartItem = {
@@ -59,17 +63,31 @@ export default function ProductsPage() {
   const input = searchInput.trim().toLowerCase();
 
   const filteredProducts = products.filter(
-    (product) =>
+    (product) => {
+      const matchesCategory = selectedCategory === "Alla" || product.category === selectedCategory;
+
+      const matchesSearch =
       String(product.id).includes(input) ||
       product.name.toLowerCase().includes(input) ||
       product.description.toLowerCase().includes(input) ||
       String(product.price).includes(input) ||
-      String(product.quantity).includes(input),
-  );
+      String(product.quantity).includes(input)
+
+      return matchesCategory && matchesSearch;
+  });
 
   return (
     <div>
       <h2>Produkter</h2>
+
+      <select value={selectedCategory} onChange={(event) => setSelectedCategory(event.target.value)}>
+        {categoryOptions.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
+
       <input
         type="text"
         placeholder="Sök"
@@ -77,7 +95,7 @@ export default function ProductsPage() {
         onChange={(event) => setSearchInput(event.target.value)}
       />
       {filteredProducts.length === 0 ? (
-        <p>Inga produkter med matchar din sökning...</p>
+        <p>Inga produkter matchar din sökning...</p>
       ) : (
         <ul>
           {filteredProducts.map((product) => (
