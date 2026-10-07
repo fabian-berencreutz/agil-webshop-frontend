@@ -95,3 +95,22 @@ export async function deleteProduct(id: number): Promise<void> {
     throw new Error(`Kunde inte ta bort produkt (status ${response.status})`);
   }
 }
+export async function getProductById(id: number): Promise<Product> {
+  const token = getToken();
+
+  const headers: HeadersInit = {};
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_URL}/${id}`, {
+    headers,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Kunde inte hämta produkten (status ${response.status})`);
+  }
+
+  return response.json();
+}

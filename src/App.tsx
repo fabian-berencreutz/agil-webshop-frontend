@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
 
 function App() {
   return (
@@ -18,8 +19,7 @@ function App() {
       <Header />
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
-        <Link to="/private">Adminpanel</Link>{" "}
-        <Link to="/login">Logga in</Link>
+        <Link to="/private">Adminpanel</Link> <Link to="/login">Logga in</Link>
       </nav>
 
       <main className="main">
@@ -40,6 +40,7 @@ function App() {
           />
 
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
 
           <Route
             path="/private"
