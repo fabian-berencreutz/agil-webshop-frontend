@@ -10,6 +10,8 @@ import AdminRoute from "./components/AdminRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
+import ProductDetailsPage from "./pages/ProductDetailsPage";
+
 import { isAdmin, isAuthenticated } from "./service/authService";
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
   return (
     <div className="app">
       <Header />
+
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
         {isAdmin() && (
@@ -33,6 +36,8 @@ function App() {
           <Route path="/" element={<h2>Välkommen</h2>} />
 
           <Route path="/products" element={<ProductsPage />} />
+
+          <Route path="/products/:id" element={<ProductDetailsPage />} />
 
           <Route
             path="/admin/products"
@@ -53,6 +58,7 @@ function App() {
               </AdminRoute>
             }
           />
+
           <Route
             path="/admin/products/new"
             element={
