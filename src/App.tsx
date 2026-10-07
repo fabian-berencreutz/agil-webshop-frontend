@@ -10,7 +10,7 @@ import AdminRoute from "./components/AdminRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
-import { isAdmin } from "./service/authService";
+import { isAdmin, isAuthenticated } from "./service/authService";
 
 function App() {
   useLocation();
@@ -25,7 +25,7 @@ function App() {
             <Link to="/private">Adminpanel</Link>{" "}
           </>
         )}
-        <Link to="/login">Logga in</Link>
+        {!isAuthenticated() && <Link to="/login">Logga in</Link>}
       </nav>
 
       <main className="main">
