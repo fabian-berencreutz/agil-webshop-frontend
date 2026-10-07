@@ -16,6 +16,7 @@ const ProductCard = ({ product, onAdd }: ProductCardProps) => {
   />
 )}
       <h2>{product.name}</h2>
+      <p>{product.category}</p>
       <p>{product.description}</p>
       <strong>{product.price} kr</strong>
       <p>Lager: {product.quantity}</p>
