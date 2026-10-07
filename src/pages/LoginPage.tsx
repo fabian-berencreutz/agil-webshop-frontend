@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
-import { login } from "../service/authService";
+import { login, isAdmin } from "../service/authService";
 
 const LoginPage = () => {
   const [message, setMessage] = useState("");
@@ -15,7 +15,11 @@ const LoginPage = () => {
       });
 
       setMessage("Inloggning lyckades");
-      navigate("/private");
+      if (isAdmin()) {
+        navigate("/private");
+      } else {
+        navigate("/");
+      }
     } catch {
       setMessage("Fel användarnamn eller lösenord");
     }
