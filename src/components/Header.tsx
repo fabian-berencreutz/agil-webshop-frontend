@@ -1,5 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { getUser, logout } from "../service/authService";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  getUser,
+  isAdmin,
+  isAuthenticated,
+  logout,
+} from "../service/authService";
 
 function Header() {
   useLocation();
@@ -9,8 +14,8 @@ function Header() {
 
   const handleLogout = () => {
     logout();
-    navigate("/", { replace: true});
-  }
+    navigate("/", { replace: true });
+  };
 
   return (
     <header className="header">
@@ -23,8 +28,17 @@ function Header() {
           <button onClick={handleLogout}>Logga ut</button>
         </div>
       )}
+
+      <nav>
+        <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
+        {isAdmin() && (
+          <>
+            <Link to="/private">Adminpanel</Link>{" "}
+          </>
+        )}
+        {!isAuthenticated() && <Link to="/login">Logga in</Link>}
+      </nav>
     </header>
   );
 }
-
 export default Header;

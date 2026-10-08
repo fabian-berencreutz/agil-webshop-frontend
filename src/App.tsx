@@ -1,5 +1,5 @@
 import "./App.css";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import AdminProductsPage from "./pages/AdminProductsPage";
 import ProductsPage from "./pages/ProductsPage";
@@ -12,33 +12,17 @@ import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 
-import { isAdmin, isAuthenticated } from "./service/authService";
-
 function App() {
   useLocation();
 
   return (
     <div className="app">
       <Header />
-
-      <nav>
-        <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
-        {isAdmin() && (
-          <>
-            <Link to="/private">Adminpanel</Link>{" "}
-          </>
-        )}
-        {!isAuthenticated() && <Link to="/login">Logga in</Link>}
-      </nav>
-
       <main className="main">
         <Routes>
           <Route path="/" element={<h2>Välkommen</h2>} />
-
           <Route path="/products" element={<ProductsPage />} />
-
           <Route path="/products/:id" element={<ProductDetailsPage />} />
-
           <Route
             path="/admin/products"
             element={
@@ -47,9 +31,7 @@ function App() {
               </AdminRoute>
             }
           />
-
           <Route path="/login" element={<LoginPage />} />
-
           <Route
             path="/private"
             element={
@@ -58,7 +40,6 @@ function App() {
               </AdminRoute>
             }
           />
-
           <Route
             path="/admin/products/new"
             element={
@@ -69,7 +50,6 @@ function App() {
           />
         </Routes>
       </main>
-
       <Footer />
     </div>
   );
