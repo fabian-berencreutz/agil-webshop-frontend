@@ -13,18 +13,26 @@ export default function ProductsPage() {
   const [showCart, setShowCart] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Alla");
-
   const categoryOptions = ["Alla", ...categories];
 
   function addToCart(product: Product) {
-    const cartItem: CartItem = {
-      product,
-      quantity: 1,
-    };
+    setCartItems((currentItems) => {
+      const existingItem = currentItems.find(
+        (item) => item.product.id === product.id,
+      );
 
-    setCartItems((currentItems) => [...currentItems, cartItem]);
+      if (existingItem) {
+        return currentItems.map((item) =>
+          item.product.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        );
+      }
 
-    alert(`${cartItem.product.name} har lagts i kundvagnen`);
+      return [...currentItems, { product, quantity: 1 }];
+    });
+
+    alert(`${product.name} har lagts i kundvagnen`);
   }
 
   useEffect(() => {
@@ -62,25 +70,28 @@ export default function ProductsPage() {
 
   const input = searchInput.trim().toLowerCase();
 
-  const filteredProducts = products.filter(
-    (product) => {
-      const matchesCategory = selectedCategory === "Alla" || product.category === selectedCategory;
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory === "Alla" || product.category === selectedCategory;
 
-      const matchesSearch =
+    const matchesSearch =
       String(product.id).includes(input) ||
       product.name.toLowerCase().includes(input) ||
       product.description.toLowerCase().includes(input) ||
       String(product.price).includes(input) ||
-      String(product.quantity).includes(input)
+      String(product.quantity).includes(input);
 
-      return matchesCategory && matchesSearch;
+    return matchesCategory && matchesSearch;
   });
 
   return (
     <div>
       <h2>Produkter</h2>
 
-      <select value={selectedCategory} onChange={(event) => setSelectedCategory(event.target.value)}>
+      <select
+        value={selectedCategory}
+        onChange={(event) => setSelectedCategory(event.target.value)}
+      >
         {categoryOptions.map((category) => (
           <option key={category} value={category}>
             {category}
