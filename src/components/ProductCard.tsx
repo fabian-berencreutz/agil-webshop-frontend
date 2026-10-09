@@ -7,10 +7,10 @@ type ProductCardProps = {
 
 const ProductCard = ({ product, onAdd }: ProductCardProps) => {
   return (
-    <article>
+    <article className="border rounded-lg h-full">
       <a href={`/products/${product.id}`}>
         {product.imageUrl && (
-          <img src={product.imageUrl} alt={product.name} width="200" />
+          <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover rounded-lg"/>
         )}
 
         <h2>{product.name}</h2>

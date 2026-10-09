@@ -108,11 +108,11 @@ export default function ProductsPage() {
       {filteredProducts.length === 0 ? (
         <p>Inga produkter matchar din sökning...</p>
       ) : (
-        <ul>
+        <div className="grid grid-cols-3 gap-4 auto-rows-fr max-w-5xl mx-auto">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} onAdd={addToCart} />
           ))}
-        </ul>
+        </div>
       )}
 
       <button onClick={() => setShowCart(!showCart)}>
