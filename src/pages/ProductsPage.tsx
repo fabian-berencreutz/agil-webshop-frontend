@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { CartItem, Product } from "../types/product";
 import { getProducts } from "../service/productService";
+import { createOrder } from "../service/orderService";
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
 import { categories } from "../types/category";
@@ -9,7 +10,21 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [orderError, setOrderError] = useState<string | null>(null);
+  const [orderSuccess, setOrderSuccess] = useState<string | null>(null);
+  const [creatingOrder, setCreatingOrder] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const savedCart = sessionStorage.getItem("cart");
+
+    if (savedCart) {
+      return JSON.parse(savedCart);
+    }
+
+    return [];
+  });
+  useEffect(() => {
+    sessionStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
   const [showCart, setShowCart] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Alla");
@@ -33,6 +48,38 @@ export default function ProductsPage() {
     });
 
     alert(`${product.name} har lagts i kundvagnen`);
+  }
+  async function handleCheckout() {
+    if (cartItems.length === 0) {
+      setOrderError("Kundvagnen är tom.");
+      return;
+    }
+
+    try {
+      setCreatingOrder(true);
+      setOrderError(null);
+      setOrderSuccess(null);
+
+      const order = {
+        orderItems: cartItems.map((item) => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+        })),
+      };
+
+      await createOrder(order);
+
+      setCartItems([]);
+      setOrderSuccess("Ordern skapades!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setOrderError(err.message);
+      } else {
+        setOrderError("Ett okänt fel uppstod när ordern skulle skapas.");
+      }
+    } finally {
+      setCreatingOrder(false);
+    }
   }
 
   useEffect(() => {
@@ -119,7 +166,20 @@ export default function ProductsPage() {
         {showCart ? "Dölj kundvagn" : "Visa kundvagn"}
       </button>
 
-      {showCart && <Cart items={cartItems} />}
+      {showCart && (
+        <>
+          <Cart items={cartItems} />
+
+          {cartItems.length > 0 && (
+            <button onClick={handleCheckout} disabled={creatingOrder}>
+              {creatingOrder ? "Skapar order..." : "Genomför köp"}
+            </button>
+          )}
+
+          {orderError && <p>{orderError}</p>}
+          {orderSuccess && <p>{orderSuccess}</p>}
+        </>
+      )}
     </div>
   );
 }
