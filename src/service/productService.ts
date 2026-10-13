@@ -74,6 +74,7 @@ export async function createProduct(
 
   return response.json();
 }
+
 export async function deleteProduct(id: number): Promise<void> {
   const token = getToken();
 
@@ -96,6 +97,7 @@ export async function deleteProduct(id: number): Promise<void> {
     throw new Error(`Kunde inte ta bort produkt (status ${response.status})`);
   }
 }
+
 export async function getProductById(id: number): Promise<Product> {
   const token = getToken();
 
@@ -110,6 +112,10 @@ export async function getProductById(id: number): Promise<Product> {
   });
 
   if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+
     throw new Error(`Kunde inte hämta produkten (status ${response.status})`);
   }
 

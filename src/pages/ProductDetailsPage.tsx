@@ -15,11 +15,27 @@ function ProductDetailsPage() {
 
     getProductById(Number(id))
       .then(setProduct)
-      .catch(() => setError("Kunde inte hämta produkten"));
+      .catch((err) => {
+        if (err instanceof Error && err.message === "PRODUCT_NOT_FOUND") {
+          setError("Produkten hittades inte");
+        } else {
+          setError("Kunde inte hämta produkten");
+        }
+      });
   }, [id]);
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="flex flex-col items-center m-4">
+        <p>{error}</p>
+        <Link
+          to="/products"
+          className="border rounded-lg m-3 p-1 cursor-pointer bg-slate-600 hover:bg-slate-800 text-white"
+        >
+          Tillbaka till produkter
+        </Link>
+      </div>
+    );
   }
 
   if (!product) {
@@ -28,23 +44,29 @@ function ProductDetailsPage() {
 
   return (
     <div className="flex flex-col items-center justify-center m-4">
-    <div className="border rounded-lg w-100 text-center">
-      {product.imageUrl && (
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          className="w-100 h-48 object-cover rounded-lg"
-        />
-      )}
+      <div className="border rounded-lg w-100 text-center">
+        {product.imageUrl && (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="w-100 h-48 object-cover rounded-lg"
+          />
+        )}
 
-      <h1>{product.name}</h1>
-      <p>{product.description}</p>
-      <p>Pris: {product.price} kr</p>
-      <p>Lager: {product.quantity}</p>
+        <h1>{product.name}</h1>
+        <p>{product.description}</p>
+        <p>Pris: {product.price} kr</p>
+        <p>Lager: {product.quantity}</p>
 
-      {product.category && <p>Kategori: {product.category}</p>}
-    </div>
-    <Link to="/products" className="border rounded-lg m-3 p-1 cursor-pointer bg-slate-600 hover:bg-slate-800 text-white">Tillbaka till produkter</Link>
+        {product.category && <p>Kategori: {product.category}</p>}
+      </div>
+
+      <Link
+        to="/products"
+        className="border rounded-lg m-3 p-1 cursor-pointer bg-slate-600 hover:bg-slate-800 text-white"
+      >
+        Tillbaka till produkter
+      </Link>
     </div>
   );
 }
