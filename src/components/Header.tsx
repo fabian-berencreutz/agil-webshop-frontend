@@ -18,14 +18,14 @@ function Header() {
   };
 
   return (
-    <header className="header">
-      <h1>Agil Webbshop</h1>
+    <header className="text-center bg-slate-800 text-white p-4">
+      <h1 className="text-5xl">Webshop</h1>
 
       {user && (
         <div>
           <p>Inloggad som: {user.subject}</p>
           <p>Roll: {user.roles.join(", ")}</p>
-          <button onClick={handleLogout}>Logga ut</button>
+          <button onClick={handleLogout} className="border rounded-lg m-4 p-1 cursor-pointer bg-blue-900 hover:bg-blue-800">Logga ut</button>
         </div>
       )}
 

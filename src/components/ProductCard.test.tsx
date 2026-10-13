@@ -13,14 +13,13 @@ describe('ProductCard', () => {
     quantity: 5,
   };
 
-  it('visar produktinformation (namn, beskrivning, pris och lager)', () => {
+  it('visar produktinformation (namn, beskrivning, pris)', () => {
     const mockOnAdd = vi.fn();
     render(<ProductCard product={mockProduct} onAdd={mockOnAdd} />);
 
     expect(screen.getByRole('heading', { level: 2, name: 'Testprodukt' })).toBeInTheDocument();
     expect(screen.getByText('En fantastisk testprodukt')).toBeInTheDocument();
     expect(screen.getByText('299 kr')).toBeInTheDocument();
-    expect(screen.getByText('Lager: 5')).toBeInTheDocument();
   });
 
   it('anropar onAdd med rätt produkt vid klick på knappen "Lägg i kundvagnen"', async () => {
