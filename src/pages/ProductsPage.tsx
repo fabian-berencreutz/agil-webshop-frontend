@@ -86,11 +86,10 @@ export default function ProductsPage() {
 
   return (
     <div>
-      <h2>Produkter</h2>
-
       <select
         value={selectedCategory}
         onChange={(event) => setSelectedCategory(event.target.value)}
+        className="border m-3 p-1 rounded-lg"
       >
         {categoryOptions.map((category) => (
           <option key={category} value={category}>
@@ -104,7 +103,15 @@ export default function ProductsPage() {
         placeholder="Sök"
         value={searchInput}
         onChange={(event) => setSearchInput(event.target.value)}
+        className="border p-1 rounded-lg"
       />
+
+      <button onClick={() => setShowCart(!showCart)} className="border rounded-lg m-3 p-1 cursor-pointer bg-slate-600 hover:bg-slate-800 text-white">
+        {showCart ? "Dölj kundvagn" : "Visa kundvagn"}
+      </button>
+
+      {showCart && <Cart items={cartItems} />}
+
       {filteredProducts.length === 0 ? (
         <p>Inga produkter matchar din sökning...</p>
       ) : (
@@ -114,12 +121,6 @@ export default function ProductsPage() {
           ))}
         </div>
       )}
-
-      <button onClick={() => setShowCart(!showCart)}>
-        {showCart ? "Dölj kundvagn" : "Visa kundvagn"}
-      </button>
-
-      {showCart && <Cart items={cartItems} />}
     </div>
   );
 }

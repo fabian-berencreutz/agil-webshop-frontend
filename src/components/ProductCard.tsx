@@ -15,11 +15,10 @@ const ProductCard = ({ product, onAdd }: ProductCardProps) => {
 
         <h2>{product.name}</h2>
         <p>{product.description}</p>
-        <strong>{product.price} kr</strong>
-        <p>Lager: {product.quantity}</p>
+        <strong><p>{product.price} kr</p></strong>
       </a>
 
-      <button onClick={() => onAdd(product)}>Lägg i kundvagnen</button>
+      <button onClick={() => onAdd(product)} className="border rounded-lg m-4 p-1 cursor-pointer bg-blue-900 hover:bg-blue-800 text-white">Lägg i kundvagnen</button>
     </article>
   );
 };
