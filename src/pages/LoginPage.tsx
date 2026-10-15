@@ -26,8 +26,8 @@ const LoginPage = () => {
   }
 
   return (
-    <div>
-      <h1>Logga in</h1>
+    <div className="mt-4">
+      <h1 className="text-2xl mb-1">Logga in</h1>
       <LoginForm onSubmit={handleLogin} />
       <p>{message}</p>
     </div>
