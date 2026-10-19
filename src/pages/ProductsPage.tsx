@@ -5,8 +5,17 @@ import { createOrder } from "../service/orderService";
 import ProductCard from "../components/ProductCard";
 import Cart from "../components/Cart";
 import { categories } from "../types/category";
+import type { User } from "../service/authService";
 
-export default function ProductsPage() {
+type ProductsPageProps = {
+  user?: User | null;
+  onLogout?: () => void;
+};
+
+export default function ProductsPage({
+  user: _user,
+  onLogout: _onLogout,
+}: ProductsPageProps = {}) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

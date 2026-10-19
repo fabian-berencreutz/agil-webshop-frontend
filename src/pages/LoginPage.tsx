@@ -1,24 +1,34 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
-import { login, isAdmin } from "../service/authService";
+import { login, type User } from "../service/authService";
 
-const LoginPage = () => {
+type LoginPageProps = {
+  onLogin?: (user: User) => void;
+};
+
+const LoginPage = ({ onLogin }: LoginPageProps) => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   async function handleLogin(username: string, password: string) {
     try {
-      await login({
+      const loggedInUser = await login({
         username,
         password,
       });
 
+      onLogin?.(loggedInUser);
       setMessage("Inloggning lyckades");
-      if (isAdmin()) {
+
+      const isAdmin = loggedInUser.roles.some(
+        (role) => role === "ADMIN" || role === "ROLE_ADMIN",
+      );
+
+      if (isAdmin) {
         navigate("/private");
       } else {
-        navigate("/");
+        navigate("/products");
       }
     } catch {
       setMessage("Fel användarnamn eller lösenord");
@@ -33,4 +43,5 @@ const LoginPage = () => {
     </div>
   );
 };
+
 export default LoginPage;

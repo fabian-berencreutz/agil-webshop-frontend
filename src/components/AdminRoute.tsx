@@ -1,21 +1,26 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import type { ReactNode } from "react";
-import { isAuthenticated, isAdmin } from "../service/authService";
+import type { User } from "../service/authService";
 
 type AdminRouteProps = {
-  children: ReactNode;
+  user: User | null;
+  children?: ReactNode;
 };
 
-function AdminRoute({ children }: AdminRouteProps) {
-  if (!isAuthenticated()) {
+function AdminRoute({ user, children }: AdminRouteProps) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!isAdmin()) {
+  const isAdmin = user.roles.some(
+    (role) => role === "ADMIN" || role === "ROLE_ADMIN",
+  );
+
+  if (!isAdmin) {
     return <div>Åtkomst nekad. Du måste vara administratör för att se denna sida.</div>;
   }
 
-  return <>{children}</>;
+  return children ? <>{children}</> : <Outlet />;
 }
 
 export default AdminRoute;

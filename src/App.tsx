@@ -1,42 +1,61 @@
 import "./App.css";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import AdminProductsPage from "./pages/AdminProductsPage";
 import ProductsPage from "./pages/ProductsPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
+import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import PrivatePage from "./pages/PrivatePage";
 import AddProductPage from "./pages/AddProductPage";
 import LoginPage from "./pages/LoginPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { logout, type User } from "./service/authService";
 
 function App() {
-  useLocation();
+  const [user, setUser] = useState<User | null>(null);
+
+  async function handleLogout() {
+    await logout();
+    setUser(null);
+  }
 
   return (
     <div className="app">
-      <Header />
+      <Header user={user} onLogout={handleLogout} />
       <main className="main">
         <Routes>
           <Route path="/" element={<h2>Välkommen</h2>} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/products/:id" element={<ProductDetailsPage />} />
+          <Route path="/login" element={<LoginPage onLogin={setUser} />} />
+
+          {/* Skyddade routes */}
+          <Route element={<ProtectedRoute user={user} />}>
+            <Route
+              path="/products"
+              element={
+                <ProductsPage user={user!} onLogout={handleLogout} />
+              }
+            />
+            <Route path="/products/:id" element={<ProductDetailsPage />} />
+          </Route>
+
+          {/* Admin routes */}
           <Route
             path="/admin/products"
             element={
-              <AdminRoute>
+              <AdminRoute user={user}>
                 <AdminProductsPage />
               </AdminRoute>
             }
           />
-          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/private"
             element={
-              <AdminRoute>
+              <AdminRoute user={user}>
                 <PrivatePage />
               </AdminRoute>
             }
@@ -44,7 +63,7 @@ function App() {
           <Route
             path="/admin/products/new"
             element={
-              <AdminRoute>
+              <AdminRoute user={user}>
                 <AddProductPage />
               </AdminRoute>
             }

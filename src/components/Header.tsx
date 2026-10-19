@@ -1,21 +1,15 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  getUser,
-  isAdmin,
-  isAuthenticated,
-  logout,
-} from "../service/authService";
+import { Link } from "react-router-dom";
+import type { User } from "../service/authService";
 
-function Header() {
-  useLocation();
+type HeaderProps = {
+  user: User | null;
+  onLogout: () => void;
+};
 
-  const user = getUser();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/", { replace: true });
-  };
+function Header({ user, onLogout }: HeaderProps) {
+  const isAdmin = user?.roles.some(
+    (role) => role === "ADMIN" || role === "ROLE_ADMIN",
+  );
 
   return (
     <header className="text-center bg-slate-800 text-white p-4">
@@ -25,20 +19,33 @@ function Header() {
         <div>
           <p>Inloggad som: {user.subject}</p>
           <p>Roll: {user.roles.join(", ")}</p>
-          <button onClick={handleLogout} className="border rounded-lg m-4 p-1 cursor-pointer bg-blue-900 hover:bg-blue-800">Logga ut</button>
+          <button
+            type="button"
+            onClick={onLogout}
+            className="border rounded-lg m-4 p-1 cursor-pointer bg-blue-900 hover:bg-blue-800"
+          >
+            Logga ut
+          </button>
         </div>
       )}
 
       <nav>
         <Link to="/">Hem</Link> <Link to="/products">Produkter</Link>{" "}
-        {isAdmin() && (
+        {isAdmin && (
           <>
             <Link to="/private">Adminpanel</Link>{" "}
           </>
         )}
-        {!isAuthenticated() && <Link to="/login">Logga in</Link>}
+        {user ? (
+          <button type="button" onClick={onLogout}>
+            Logga ut
+          </button>
+        ) : (
+          <Link to="/login">Logga in</Link>
+        )}
       </nav>
     </header>
   );
 }
+
 export default Header;
