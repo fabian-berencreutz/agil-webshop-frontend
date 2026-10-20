@@ -1,7 +1,6 @@
-import { getToken } from "./authService";
-
-const ORDER_API_URL =
-  import.meta.env.VITE_ORDER_SERVICE_URL || "http://localhost:8082/order";
+const ORDER_API_URL = `${
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:9003"
+}/order`;
 
 export type CreateOrderItemRequest = {
   productId: number;
@@ -13,18 +12,12 @@ export type CreateOrderRequest = {
 };
 
 export async function createOrder(order: CreateOrderRequest) {
-  const token = getToken();
-
-  if (!token) {
-    throw new Error("Du måste vara inloggad för att skapa en order.");
-  }
-
   const response = await fetch(ORDER_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
+    credentials: "include",
     body: JSON.stringify(order),
   });
 

@@ -3,26 +3,30 @@ export type LoginRequest = {
   password: string;
 };
 
-export type AuthResponse = {
-  accessToken: string;
-  expiresIn: number;
+export type User = {
   subject: string;
   roles: string[];
 };
 
-export type UserInfo = {
+export type AuthResponse = {
+  accessToken?: string;
+  expiresIn?: number;
   subject: string;
   roles: string[];
-}
+};
 
-const AUTH_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export type UserInfo = User;
 
-export async function login(request: LoginRequest): Promise<AuthResponse> {
-  const response = await fetch(`${AUTH_BASE_URL}/auth/login`, {
+const GATEWAY_API_BASE =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:9003";
+
+export async function login(request: LoginRequest): Promise<User> {
+  const response = await fetch(`${GATEWAY_API_BASE}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(request),
   });
 
@@ -30,33 +34,20 @@ export async function login(request: LoginRequest): Promise<AuthResponse> {
     throw new Error("Inloggningen misslyckades");
   }
 
-  const data: AuthResponse = await response.json();
-
-  sessionStorage.setItem("token", data.accessToken);
-  sessionStorage.setItem("user", JSON.stringify({subject: data.subject, roles: data.roles}));
-
-  return data;
+  const data = await response.json();
+  return {
+    subject: data.subject,
+    roles: data.roles ?? [],
+  };
 }
 
-export function logout(): void {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("user");
-}
+export async function logout(): Promise<void> {
+  const response = await fetch(`${GATEWAY_API_BASE}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
 
-export function getToken(): string | null {
-  return sessionStorage.getItem("token");
-}
-
-export function getUser(): UserInfo | null {
-  const user = sessionStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
-}
-
-export function isAuthenticated(): boolean {
-  return getToken() !== null;
-}
-export function isAdmin(): boolean {
-  const roles = getUser()?.roles;
-  if (!roles) return false;
-  return roles.includes("ADMIN") || roles.includes("ROLE_ADMIN");
+  if (!response.ok) {
+    throw new Error("Utloggningen misslyckades");
+  }
 }

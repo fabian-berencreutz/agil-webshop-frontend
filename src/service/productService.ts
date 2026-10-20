@@ -1,25 +1,13 @@
 import type { Product } from "../types/product";
 import type { Category } from "../types/category";
-import { getToken } from "./authService";
 
-const API_URL =
-  import.meta.env.VITE_PRODUCT_SERVICE_URL || "http://localhost:8081/products";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:9003";
+const API_URL = `${API_BASE_URL}/products`;
 
-export async function getProducts(token?: string): Promise<Product[]> {
-  const authToken =
-    token ||
-    getToken() ||
-    localStorage.getItem("token") ||
-    localStorage.getItem("accessToken");
-
-  const headers: HeadersInit = {};
-
-  if (authToken) {
-    headers["Authorization"] = `Bearer ${authToken}`;
-  }
-
+export async function getProducts(): Promise<Product[]> {
   const response = await fetch(API_URL, {
-    headers,
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -47,18 +35,12 @@ export type CreateProductRequest = {
 export async function createProduct(
   product: CreateProductRequest,
 ): Promise<Product> {
-  const token = getToken();
-
-  if (!token) {
-    throw new Error("Du måste vara inloggad.");
-  }
-
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
+    credentials: "include",
     body: JSON.stringify(product),
   });
 
@@ -74,18 +56,11 @@ export async function createProduct(
 
   return response.json();
 }
+
 export async function deleteProduct(id: number): Promise<void> {
-  const token = getToken();
-
-  if (!token) {
-    throw new Error("Du måste vara inloggad.");
-  }
-
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -96,17 +71,10 @@ export async function deleteProduct(id: number): Promise<void> {
     throw new Error(`Kunde inte ta bort produkt (status ${response.status})`);
   }
 }
+
 export async function getProductById(id: number): Promise<Product> {
-  const token = getToken();
-
-  const headers: HeadersInit = {};
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
   const response = await fetch(`${API_URL}/${id}`, {
-    headers,
+    credentials: "include",
   });
 
   if (!response.ok) {
