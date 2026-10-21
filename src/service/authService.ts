@@ -51,3 +51,25 @@ export async function logout(): Promise<void> {
     throw new Error("Utloggningen misslyckades");
   }
 }
+
+export async function getMe(): Promise<User | null> {
+  try {
+    const response = await fetch(`${GATEWAY_API_BASE}/auth/me`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return {
+      subject: data.subject,
+      roles: data.roles ?? [],
+    };
+  } catch {
+    return null;
+  }
+}
+
