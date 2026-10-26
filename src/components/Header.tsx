@@ -19,13 +19,6 @@ function Header({ user, onLogout }: HeaderProps) {
         <div>
           <p>Inloggad som: {user.subject}</p>
           <p>Roll: {user.roles.join(", ")}</p>
-          <button
-            type="button"
-            onClick={onLogout}
-            className="border rounded-lg m-4 p-1 cursor-pointer bg-blue-900 hover:bg-blue-800"
-          >
-            Logga ut
-          </button>
         </div>
       )}
 
