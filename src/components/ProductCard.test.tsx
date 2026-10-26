@@ -33,4 +33,23 @@ describe('ProductCard', () => {
     expect(mockOnAdd).toHaveBeenCalledTimes(1);
     expect(mockOnAdd).toHaveBeenCalledWith(mockProduct);
   });
+
+  it('visar "Slutsåld", inaktiverar knappen och anropar inte onAdd när produkten är slut i lager', async () => {
+    const user = userEvent.setup();
+    const mockOnAdd = vi.fn();
+    const outOfStockProduct: Product = {
+      ...mockProduct,
+      quantity: 0,
+    };
+
+    render(<ProductCard product={outOfStockProduct} onAdd={mockOnAdd} />);
+
+    const button = screen.getByRole('button', { name: 'Slutsåld' });
+    expect(button).toBeInTheDocument();
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass('bg-red-600');
+
+    await user.click(button);
+    expect(mockOnAdd).not.toHaveBeenCalled();
+  });
 });
