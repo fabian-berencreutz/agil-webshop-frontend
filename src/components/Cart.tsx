@@ -17,24 +17,23 @@ const Cart = ({ items }: CartProps) => {
       {items.length === 0 ? (
         <p>Kundvagnen är tom.</p>
       ) : (
-        <>
+        <div>
           <ul>
             {items.map((item) => {
               const rowPrice = item.product.price * item.quantity;
 
               return (
-                <li key={item.product.id}>
+                <li key={item.product.id} className="flex items-center justify-center gap-4">
                   <strong>{item.product.name}</strong>
-                  <p>Pris: {item.product.price} kr</p>
-                  <p>Antal: {item.quantity}</p>
-                  <p>Radpris: {rowPrice} kr</p>
+                  <span>x{item.quantity}</span>
+                  <span>Pris: {rowPrice} kr</span>
                 </li>
               );
             })}
           </ul>
 
           <h3>Totalt: {totalPrice} kr</h3>
-        </>
+        </div>
       )}
     </aside>
   );

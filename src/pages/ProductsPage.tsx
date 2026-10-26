@@ -166,7 +166,20 @@ export default function ProductsPage({
         {showCart ? "Dölj kundvagn" : "Visa kundvagn"}
       </button>
 
-      {showCart && <Cart items={cartItems} />}
+      {showCart && (
+        <>
+          <Cart items={cartItems} />
+
+          {cartItems.length > 0 && (
+            <button onClick={handleCheckout} disabled={creatingOrder}>
+              {creatingOrder ? "Skapar order..." : <button className="border rounded-lg m-4 p-1 cursor-pointer bg-blue-900 hover:bg-blue-800 text-white">Genomför köp</button>}
+            </button>
+          )}
+
+          {orderError && <p>{orderError}</p>}
+          {orderSuccess && <p>{orderSuccess}</p>}
+        </>
+      )}
 
       {filteredProducts.length === 0 ? (
         <p>Inga produkter matchar din sökning...</p>
@@ -176,25 +189,6 @@ export default function ProductsPage({
             <ProductCard key={product.id} product={product} onAdd={addToCart} />
           ))}
         </div>
-      )}
-
-      <button onClick={() => setShowCart(!showCart)}>
-        {showCart ? "Dölj kundvagn" : "Visa kundvagn"}
-      </button>
-
-      {showCart && (
-        <>
-          <Cart items={cartItems} />
-
-          {cartItems.length > 0 && (
-            <button onClick={handleCheckout} disabled={creatingOrder}>
-              {creatingOrder ? "Skapar order..." : "Genomför köp"}
-            </button>
-          )}
-
-          {orderError && <p>{orderError}</p>}
-          {orderSuccess && <p>{orderSuccess}</p>}
-        </>
       )}
     </div>
   );
