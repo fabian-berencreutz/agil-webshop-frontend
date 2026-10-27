@@ -83,3 +83,32 @@ export async function getProductById(id: number): Promise<Product> {
 
   return response.json();
 }
+export async function increaseProductStock(
+  productId: number,
+  quantity: number,
+): Promise<Product[]> {
+  const response = await fetch(`${API_URL}/stock/increase`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify([
+      {
+        productId,
+        quantity,
+      },
+      
+    ]),
+  });
+
+  if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      throw new Error("Behörighet saknas för att öka lagret.");
+    }
+
+    throw new Error(`Kunde inte öka lagret (status ${response.status})`);
+  }
+
+  return response.json();
+}
