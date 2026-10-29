@@ -22,7 +22,7 @@ describe('ProductCard', () => {
     expect(screen.getByText('299 kr')).toBeInTheDocument();
   });
 
-  it('anropar onAdd med rätt produkt vid klick på knappen "Lägg i kundvagnen"', async () => {
+  it('anropar onAdd med rätt produkt och standardantal 1 vid klick på knappen "Lägg i kundvagnen"', async () => {
     const user = userEvent.setup();
     const mockOnAdd = vi.fn();
     render(<ProductCard product={mockProduct} onAdd={mockOnAdd} />);
@@ -31,7 +31,23 @@ describe('ProductCard', () => {
     await user.click(addButton);
 
     expect(mockOnAdd).toHaveBeenCalledTimes(1);
-    expect(mockOnAdd).toHaveBeenCalledWith(mockProduct);
+    expect(mockOnAdd).toHaveBeenCalledWith(mockProduct, 1);
+  });
+
+  it('tillåter att ändra antal och anropar onAdd med det valda antalet', async () => {
+    const user = userEvent.setup();
+    const mockOnAdd = vi.fn();
+    render(<ProductCard product={mockProduct} onAdd={mockOnAdd} />);
+
+    const qtyInput = screen.getByLabelText('Antal:');
+    await user.clear(qtyInput);
+    await user.type(qtyInput, '3');
+
+    const addButton = screen.getByRole('button', { name: 'Lägg i kundvagnen' });
+    await user.click(addButton);
+
+    expect(mockOnAdd).toHaveBeenCalledTimes(1);
+    expect(mockOnAdd).toHaveBeenCalledWith(mockProduct, 3);
   });
 
   it('visar "Slutsåld", inaktiverar knappen och anropar inte onAdd när produkten är slut i lager', async () => {
