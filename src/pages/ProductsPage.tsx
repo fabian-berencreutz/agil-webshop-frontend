@@ -39,7 +39,9 @@ export default function ProductsPage({
   const [selectedCategory, setSelectedCategory] = useState("Alla");
   const categoryOptions = ["Alla", ...categories];
 
-  function addToCart(product: Product) {
+  function addToCart(product: Product, quantityToAdd: number = 1) {
+    if (quantityToAdd <= 0) return;
+
     setCartItems((currentItems) => {
       const existingItem = currentItems.find(
         (item) => item.product.id === product.id,
@@ -48,15 +50,15 @@ export default function ProductsPage({
       if (existingItem) {
         return currentItems.map((item) =>
           item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantityToAdd }
             : item,
         );
       }
 
-      return [...currentItems, { product, quantity: 1 }];
+      return [...currentItems, { product, quantity: quantityToAdd }];
     });
 
-    alert(`${product.name} har lagts i kundvagnen`);
+    alert(`${quantityToAdd} st ${product.name} har lagts i kundvagnen`);
   }
   async function handleCheckout() {
     if (cartItems.length === 0) {
