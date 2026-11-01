@@ -15,7 +15,7 @@ function CookieBanner() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-slate-800 text-white p-4 text-center z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-slate-800 text-white px-4 py-2 text-center z-50 text-sm">
       <p>
         Webshopen använder en nödvändig cookie för att hålla dig inloggad.
         Cookien behövs för webbplatsens inloggningsfunktion och används inte för
