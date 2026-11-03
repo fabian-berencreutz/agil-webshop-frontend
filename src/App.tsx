@@ -1,3 +1,4 @@
+import CookieBanner from "./components/CookieBanner";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -53,9 +54,7 @@ function App() {
             <Route element={<ProtectedRoute user={user} />}>
               <Route
                 path="/products"
-                element={
-                  <ProductsPage user={user!} onLogout={handleLogout} />
-                }
+                element={<ProductsPage user={user!} onLogout={handleLogout} />}
               />
               <Route path="/products/:id" element={<ProductDetailsPage />} />
             </Route>
@@ -90,6 +89,7 @@ function App() {
         )}
       </main>
       <Footer />
+      <CookieBanner />
     </div>
   );
 }
