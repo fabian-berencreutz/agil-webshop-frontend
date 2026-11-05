@@ -47,7 +47,17 @@ function App() {
           <p className="text-center p-8">Laddar...</p>
         ) : (
           <Routes>
-            <Route path="/" element={<h2>Välkommen</h2>} />
+            <Route
+              path="/"
+              element={
+                <div className="text-center p-8">
+                  <h2>Välkommen till vår webshop</h2>
+                  <p>
+                    Detta är en webshop skapad av Fabian, Axel, Maryam och Sara.
+                  </p>
+                </div>
+              }
+            />
             <Route path="/login" element={<LoginPage onLogin={setUser} />} />
 
             {/* Skyddade routes */}
